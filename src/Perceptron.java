@@ -25,7 +25,6 @@ public class Perceptron {
     public void train(double[] inputs, double outputResult) {
         double output = predict(inputs);
         double error = outputResult - output;
-        System.out.println(error);
         if (error != 0) {
             for (int i = 0; i < inputSize; i++) {
                 weights[i] += learningRate * error * inputs[i];
