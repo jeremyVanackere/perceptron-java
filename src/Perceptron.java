@@ -19,22 +19,37 @@ public class Perceptron {
         for (int i = 0; i < inputs.length; i++) {
             sum += inputs[i] * weights[i];
         }
-        return sigmoid(sum + biais);
+        return sum;
     }
 
-    public void train(double[] inputs, double outputResult) {
+    public double train(double[] inputs, double outputResult) {
         double output = predict(inputs);
-        double error = outputResult - output;
+        double error = (output - outputResult);
         if (error != 0) {
             for (int i = 0; i < inputSize; i++) {
-                weights[i] += learningRate * error * inputs[i];
+                weights[i] -= learningRate * error * inputs[i];
             }
-            biais += learningRate * error;
+            biais -= learningRate * error;
         }
+        return error;
+    }
+
+    public double trainWithError(double[] inputs, double error, double[] parentsWeights) {
+        if (error != 0) {
+            for (int i = 0; i < inputSize; i++) {
+                weights[i] -= learningRate * error * inputs[i] * parentsWeights[i];
+            }
+            biais -= learningRate * error;
+        }
+        return error;
     }
 
     private double sigmoid(double x) {
         return 1 / (1 + Math.exp(-x));
+    }
+
+    private double sigmoidDerivative(double x) {
+        return x * (1 - x);
     }
 
     public double[] getWeights() {
